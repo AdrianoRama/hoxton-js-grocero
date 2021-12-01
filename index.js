@@ -75,6 +75,43 @@ const state = [
 ]
 
 
+function storeItem() {
+  const liEl = document.createElement(`li`)
+  const storeItemIcon = document.createElement(`div`)
+  storeItemIcon.setAttribute(`class`, `store--item-icon`)
+  const btnEl = document.createElement(`button`)
+  btnEl.textContent = `Add to cart`
+  const imgEl = document.createElement(`img`)
+  imgEl.setAttribute(`src`, `assets/icons/001-beetroot.svg`)
+  imgEl.setAttribute(`alt`, `beetroot`)
+  liEl.append(storeItemIcon, btnEl)
+  storeItemIcon.append(imgEl)
+}
+
+function cartItem() {
+  const liEl = document.createElement(`li`)
+  const cartItemIcon = document.createElement(`img`)
+  cartItemIcon.setAttribute(`class`, `cart--item-icon`)
+  cartItemIcon.setAttribute(`src`, `assets/icons/001-beetroot.svg`)
+  cartItemIcon.setAttribute(`alt`, `beetroot`)
+  const paragraphEl = document.createElement(`p`)
+  paragraphEl.textContent = `beetroot`
+  const quantityBtn = document.createElement(`button`)
+  quantityBtn.setAttribute(`class`, `quantity-btn remove-btn center`)
+  quantityBtn.textContent =  `-`
+  const quantityTxt = document.createElement(`span`)
+  quantityTxt.setAttribute(`class`, `quantity-text center`)
+  quantityTxt.textContent = `1`
+  const addBtn = document.createElement(`button`)
+  addBtn.setAttribute(`class`, `quantity-btn add-btn center`)
+  addBtn.textContent = `+`
+  liEl.append(cartItemIcon, paragraphEl, quantityBtn, quantityTxt, addBtn)
+
+}
+
+
+
+
 
 function render() {
 

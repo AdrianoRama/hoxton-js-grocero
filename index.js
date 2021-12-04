@@ -1,14 +1,72 @@
-/*
+const storeUl = document.querySelector(".item-list.store--item-list")
 
-This is how an item object should look like
+const cartUl = document.querySelector("#cart .item-list.cart--item-list")
 
-{
-  id: 1, // <- the item id matches the icon name in the assets/icons folder
-  name: "beetroot",
-  price: 0.35 // <- You can come up with your own prices
+const totalEl = document.querySelector(`.total-number`)
+
+function renderStoreItem(grocery) {
+  const liEl = document.createElement(`li`)
+
+  const storeItemIcon = document.createElement(`div`)
+  storeItemIcon.setAttribute(`class`, `store--item-icon`)
+
+  const btnEl = document.createElement(`button`)
+  btnEl.textContent = `Add to cart`
+
+  btnEl.addEventListener(`click`, function() {
+    addItemToCart(grocery)
+
+    render()
+  })
+
+  const imgEl = document.createElement(`img`)
+  imgEl.setAttribute(`src`, `assets/icons/${grocery.id<10?'00':'0'}${grocery.id}-${grocery.name}.svg`)
+  imgEl.setAttribute(`alt`, `beetroot`)
+
+  storeUl.append(liEl)
+  liEl.append(storeItemIcon, btnEl)
+  storeItemIcon.append(imgEl)
 }
 
-*/
+function renderCartitem(cartItem) {
+  const liEl = document.createElement(`li`)
+
+  const cartItemIcon = document.createElement(`img`)
+  cartItemIcon.setAttribute(`class`, `cart--item-icon`)
+  cartItemIcon.setAttribute(`src`, `assets/icons/${cartItem.id<10?'00':'0'}${cartItem.id}-${cartItem.name}.svg`)
+  cartItemIcon.setAttribute(`alt`, cartItem.name)
+
+  const paragraphEl = document.createElement(`p`)
+  paragraphEl.textContent = cartItem.name
+
+  const quantityBtn = document.createElement(`button`)
+  quantityBtn.setAttribute(`class`, `quantity-btn remove-btn center`)
+  quantityBtn.textContent =  `-`
+
+  quantityBtn.addEventListener(`click`, function() {
+    removeItemFromCart(cartItem)
+    
+    render()
+  })
+
+  const quantityTxt = document.createElement(`span`)
+  quantityTxt.setAttribute(`class`, `quantity-text center`)
+  quantityTxt.textContent = cartItem.amount
+
+  const addBtn = document.createElement(`button`)
+  addBtn.setAttribute(`class`, `quantity-btn add-btn center`)
+  addBtn.textContent = `+`
+
+  addBtn.addEventListener(`click`, function() {
+    addItemToCart(cartItem)
+
+    render()
+  })
+
+  cartUl.append(liEl)
+  liEl.append(cartItemIcon, paragraphEl, quantityBtn, quantityTxt, addBtn)
+}
+
 
 const state = {
   groceries : [ {
@@ -74,66 +132,65 @@ const state = {
   ]}
 
 
-function storeItems() {
-  const storeUl = document.querySelector(".item-list.store--item-list")
+function renderstoreItems() {
+  storeUl.innerHTML = ``
 
   for (const grocery of state.groceries){
-
-  const liEl = document.createElement(`li`)
-
-  const storeItemIcon = document.createElement(`div`)
-  storeItemIcon.setAttribute(`class`, `store--item-icon`)
-
-  const btnEl = document.createElement(`button`)
-  btnEl.textContent = `Add to cart`
-
-  const imgEl = document.createElement(`img`)
-  imgEl.setAttribute(`src`, `assets/icons/${grocery.id<10?'00':'0'}${grocery.id}-${grocery.name}.svg`)
-  imgEl.setAttribute(`alt`, `beetroot`)
-
-  storeUl.append(liEl)
-  liEl.append(storeItemIcon, btnEl)
-  storeItemIcon.append(imgEl)
+   renderStoreItem(grocery)
   }
 }
-storeItems()
 
-function cartItems() {
-
-  const cartUl = document.querySelecton("#cart .item-list.cart--item-list")
-
-  const liEl = document.createElement(`li`)
-
-  const cartItemIcon = document.createElement(`img`)
-  cartItemIcon.setAttribute(`class`, `cart--item-icon`)
-  cartItemIcon.setAttribute(`src`, `assets/icons/001-beetroot.svg`)
-  cartItemIcon.setAttribute(`alt`, `beetroot`)
-
-  const paragraphEl = document.createElement(`p`)
-  paragraphEl.textContent = `beetroot`
-
-  const quantityBtn = document.createElement(`button`)
-  quantityBtn.setAttribute(`class`, `quantity-btn remove-btn center`)
-  quantityBtn.textContent =  `-`
-
-  const quantityTxt = document.createElement(`span`)
-  quantityTxt.setAttribute(`class`, `quantity-text center`)
-  quantityTxt.textContent = `1`
-
-  const addBtn = document.createElement(`button`)
-  addBtn.setAttribute(`class`, `quantity-btn add-btn center`)
-  addBtn.textContent = `+`
-
-  cartUl.append(liEl)
-  liEl.append(cartItemIcon, paragraphEl, quantityBtn, quantityTxt, addBtn)
-
+function getCart(){
+  return state.groceries.filter(item => item.amount > 0)
 }
-cartItems()
+
+function getTotal(){
+  let total = 0
+  
+  const cart = getCart()
+
+  for (const item of cart){
+    total += item.price * item.amount
+  }
+
+  return total
+}
+
+function renderCartItems() {
+  cartUl.innerHTML = ``
+  
+   const cart = getCart()
 
 
+   for(const cartItem of cart){
+    renderCartitem(cartItem)
+   }
+}
+
+function renderTotal(){
+  totalEl.textContent = `$` + getTotal().toFixed(2)
+}
+
+function addItemToCart(item) {
+ item.amount++
+}
+
+function removeItemFromCart(item) {
+  if(item.amount > 0){
+    item.amount--
+  }
+ 
+}
 
 function render() {
-
+  renderstoreItems()
+  renderCartItems()
+  renderTotal()
 }
 
+render()
+render()
+render()
+render()
+render()
 render()
